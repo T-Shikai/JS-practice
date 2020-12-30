@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>神経衰弱
+    </title>
+    <style>
+        #field{ width:600px;}
+        .card{
+            width:60px;
+            height:100px;
+            line-height: 100px;
+            text-align: center;
+            border:2px solid #aaa;
+            border-radius: 5px;
+            font-size: 30px;
+            margin:8px;
+            float: left;
+        }
+    </style>
+</head>
+<body>
+    <div id="field">
+    </div>
+    <script>
+
+        function rand(min,max){
+            return Math.floor(Math.random()*(max-min+1))+min;
+        }
+
+        let cards =[
+            "A","2","3","4","5","6","7","8","9","10","J","Q","K",
+            "A","2","3","4","5","6","7","8","9","10","J","Q","K"
+        ];
+
+        for(let i =cards.length-1 ;i > 0; i--){
+            let r =rand(0,i);
+            let tmp =cards[i];
+            cards[i] =cards[r];
+            cards[r] =tmp;
+        }
+
+        let field = document.getElementById("field");
+        let first =null;
+        let second =null;
+
+        
+        let clicker = (e)=>{
+            
+            let elm = e.target;
+            elm.innerHTML = cards[elm.index];
+
+            if(!first){
+                first = elm;
+            } else if(first.index === elm.index){
+                return;
+            } else{
+                second =elm;
+                const judge =()=>{
+                    if(first.innnerHTML == second.innerHTML){
+                        first.style.visibility="hidden";
+                        second.style.visibility="hidden";
+                    } else{
+                        first.innerHTML="";
+                        second.innerHTML="";
+                    }
+
+                    first =null;
+                    second =null;
+                    timer =null;
+                }
+                timer =setTimeout(judge,1000);
+
+                if(timer){
+                clearTimeout(timer);
+                judge();
+            }
+
+                
+
+            }
+
+        }
+
+        for(let i=0;i < cards.length; i++){
+            let elm = document.createElement("div");
+            elm.className="card";
+            elm.innerHTML= ""; //cards[i];
+            elm.index =i;
+            elm.onclick = clicker;
+            field.appendChild(elm);
+        }
+
+
+    </script>
+    
+</body>
+</html>

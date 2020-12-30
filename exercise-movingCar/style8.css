@@ -1,0 +1,54 @@
+body {
+    margin: 0;
+    overflow: hidden;
+}
+
+.sky{
+    background:url("./img/sky.png");
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    background-size: cover;
+}
+
+.daytime{
+    background:url("./img/daytime.png");
+    width:500%;
+    height:360px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+
+.car img{
+    width: 200px;
+    position: absolute;
+    bottom: 0;
+    left: 120;
+}
+
+@keyframes moving {
+    100%{
+        transform:translateX(-3000px);
+    }
+}
+
+@keyframes suspention {
+    100%{
+        transform: translateY(0px);
+    }
+    50%{
+        transform: translateY(5px);
+    }
+    0%{
+        transform: translateY(0px);
+    }
+}
+
+.moving{
+    animation: moving 10s linear infinite;
+}
+
+.suspention {
+    animation: suspention 1s linear infinite;
+}

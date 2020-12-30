@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+<style>
+    #clock{
+        font-size:20px;
+    }
+    #miss{
+        color:rgb(255, 0, 0);
+    }
+    #score{
+        width: 600px;
+        font-size:35px;
+        border:5px solid rgb(81, 207, 224);
+        background-color: rgb(12, 11, 11);
+        color:rgb(255, 255, 255);
+    }
+    #field{
+        width:600px;
+    }
+    .card{
+        width:60px;
+        height:100px;
+        line-height: 100px;
+        text-align: center;
+        border:2px solid #aaa;
+        border-radius: 5px;
+        font-size:30px;
+        margin:8px;
+        float: left;
+    }
+</style>
+</head>
+<body>
+    <div id="clock"></div> <div id="miss"></div>
+    <div id="score"></div>
+    <div id="field"></div>
+    <script>
+        const $field = document.getElementById("field");
+
+
+        let cards = [
+            "A","2","3","4","5","6","7","8","9","10","J","Q","K",
+            "A","2","3","4","5","6","7","8","9","10","J","Q","K"
+        ];
+
+        const rand = (max,min)=>{
+            return Math.floor(Math.random()*(max-min+1))+min;   
+        }    
+
+       let randIndex = cards.length -1;
+       while(randIndex > 0){
+           let i = rand(randIndex,0);
+           let tmp = cards[randIndex];
+           cards[randIndex] = cards[i];
+           cards[i] = tmp;
+           randIndex--;
+       }
+
+        let cardIndex =0;
+        while(cardIndex < cards.length){
+            let elm = document.createElement("div");
+            elm.className ="card";
+            elm.innerText ="";
+            elm.index =cardIndex;
+            elm.onclick = clicker;
+            $field.appendChild(elm);
+            cardIndex++;
+        }
+
+        let first = null;
+        let second = null;
+        let timer = null;
+        let count =0;
+        const $clock = document.getElementById("clock");
+        $clock.innerHTML="TIME:0秒";
+        let timer2 =setInterval(function(){$clock.innerHTML ="TIME:"+(++count)+"秒"},1000);
+        const $score = document.getElementById("score");
+        let scoreNum = 0;
+        $score.innerText ="SCORE:"+scoreNum+"/"+cards.length;
+        const $miss =document.getElementById("miss");
+        let missNum =0;
+
+     
+
+        function clicker(e){
+            if(timer){
+                clearTimeout(timer);
+                timer = null;
+                judge();
+            }
+
+            e.target.innerText =cards[e.target.index];
+
+            if(!first){
+                first = e.target;
+            } else if(first.index === e.target.index){
+                return;
+            } else{
+                second = e.target;
+                timer = setTimeout(judge,1000);
+            }
+        }
+
+        function judge(){
+            if(first.innerText === second.innerText){
+                first.style.visibility = "hidden";
+                second.style.visibility = "hidden";
+                scoreNum += 2;
+                $score.innerText ="SCORE:"+scoreNum+"/"+cards.length;
+                
+            } else{
+                first.innerText = "";
+                second.innerText = "";
+                missNum++;
+                $miss.innerHTML ="ミス:"+missNum+"回"
+                if(missNum === 100){
+                    alert("お手つきしすぎか！");
+                }
+                
+            }
+            first = null;
+            second =null;
+            timer =null;
+            if(scoreNum === cards.length){
+                clearInterval(timer2);
+                alert("終了！！！");
+            }
+        }
+            
+
+    
+
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #clock{font-size:30px;}
+        #field{width:600px;}
+        .card{
+            width:60px;
+            height:100px;
+            line-height: 100px;
+            text-align: center;
+            border:2px solid #aaa;
+            border-radius: 5px;
+            font-size:30px;
+            margin:8px;
+            float: left;
+        }
+    </style>
+</head>
+<body>
+
+    <div id ="clock"></div>
+    <div id ="score"></div>
+    <div id ="field">
+    </div>
+    
+    <script>
+
+        const rand = (min,max) =>{
+            return Math.floor(Math.random()*(max-min+1))+min;
+        }
+
+        let cards =[
+            "A","2","3","4","5","6","7","8","9","10","J","Q","K",
+            "A","2","3","4","5","6","7","8","9","10","J","Q","K"
+        ];
+
+        let randIndex = cards.length-1;
+        while(randIndex>0){
+            let i = rand(0,randIndex);
+            let tmp = cards[randIndex];
+            cards[randIndex] = cards[i];
+            cards[i] = tmp;
+            randIndex--;
+        }
+
+        let $field = document.getElementById("field");
+
+        let cardIndex =0;
+        while(cardIndex < cards.length){
+            let elm =document.createElement("div");
+            elm.className ="card";
+            elm.innerHTML = ""; //cards[cardIndex];
+            elm.index =cardIndex; //?
+            elm.onclick = clicker;
+            $field.appendChild(elm);
+            cardIndex++;
+        }
+
+        let first = null;
+        let second = null;
+        let timer = null;
+
+        let count =0;
+        let score =0;
+        let clock = document.getElementById("clock");
+        let scoreNum = document.getElementById("score");
+        let timer2 = setInterval(function(){
+            clock.innerText = "経過時間:"+(++count);
+        },1000);
+
+
+        function clicker(e){
+            if(timer){
+                clearTimeout(timer);
+                timer =null;
+                judge();                                      
+            }
+            e.target.innerHTML =cards[e.target.index];
+
+            if(!first){
+                first = e.target;
+            } else if(first.index === e.target.index){
+                return;
+            } else{
+                second = e.target;
+                timer =setTimeout(judge,1000);
+
+                
+
+            }
+        }
+        function judge(){
+            if(first.innerHTML === second.innerHTML){
+                first.style.visibility="hidden";
+                second.style.visibility="hidden";
+                score += 2;
+                scoreNum.innerText="score:"+score+"/"+cards.length;
+
+                if(score === cards.length){
+                    clearInterval(timer2);
+                }
+            } else{
+                first.innerHTML ="";
+                second.innerHTML ="";
+            }
+            first = null;
+            second = null;
+            timer = null;
+        }
+    </script>
+</body>
+</html>
