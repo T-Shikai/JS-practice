@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>おみくじ</h1>
+    <button id="btn">おみくじスタート</button>
+
+    <div id="disp"></div>
+
+    <script>
+        const items = ["大吉","中吉","小吉","凶"];
+        const btn =document.getElementById("btn");
+        const disp =document.getElementById("disp");
+        let num =0;
+
+        btn.addEventListener("click",()=>{
+            const num = Math.floor(Math.random() * items.length);
+            disp.innerText = items[num];
+
+        })
+    </script>
+
+</body>
+</html>
